@@ -1,5 +1,7 @@
 package com.jvamaral.workshopmongo.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,5 +20,10 @@ public class PostService {
 	public Post findById(String id) {
 		Post post = repository.findById(id).orElseThrow(()-> new ObjectNotFoundException("Objeto nao encontrado"));
 		return post;
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Post> findByTitle(String text){
+		return repository.findByTitleContainingIgnoreCase(text);
 	}
 }
