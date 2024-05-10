@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jvamaral.workshopmongo.domain.Post;
+import com.jvamaral.workshopmongo.dto.PostDTO;
 import com.jvamaral.workshopmongo.repositories.PostRepository;
 import com.jvamaral.workshopmongo.services.exception.ObjectNotFoundException;
 
@@ -18,18 +19,18 @@ public class PostService {
 	private PostRepository repository;
 	
 	@Transactional(readOnly = true)
-	public Post findById(String id) {
-		Post post = repository.findById(id).orElseThrow(()-> new ObjectNotFoundException("Objeto nao encontrado"));
-		return post;
+	public PostDTO findById(String id) {
+		Post entity = repository.findById(id).orElseThrow(()-> new ObjectNotFoundException("Objeto nao encontrado"));
+		return new PostDTO(entity);
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Post> findByTitle(String text){
+	public List<PostDTO> findByTitle(String text){
 		return repository.searchTitle(text);
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Post> fullSearch(String text, Date minDate, Date maxDate) {
+	public List<PostDTO> fullSearch(String text, Date minDate, Date maxDate) {
 		maxDate = new Date(maxDate.getTime() + 24 * 60 * 60 * 1000);
 		return repository.fullSearch(text, minDate, maxDate);
 	}
